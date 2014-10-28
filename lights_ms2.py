@@ -2,7 +2,7 @@ import json
 from bootstrap import *
 
 def set_lights(data):
-    json_obj = json.dumps(data)
+    json_obj = json.loads(data)
     lights = json_obj['lights']
     propagate = json_obj['propagate']
     led.fill(Color(0, 0, 0, 0), start=0, end=31)
