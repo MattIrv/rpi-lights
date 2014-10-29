@@ -12,3 +12,4 @@ def set_lights(data):
             led.fill(Color(light['red'], light['green'], light['blue'], light['intensity']), start=light_id, end=31)
         else:
             led.fill(Color(light['red'], light['green'], light['blue'], light['intensity']), start=light_id, end=light_id)
+    led.update()
