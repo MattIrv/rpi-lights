@@ -7,5 +7,5 @@ while True:
 		s.close()
 		urllib2.urlopen("http://cs4720.cs.virginia.edu/ipregistration/?pokemon=Natu&ip=" + ip)
 		sys.exit(0)
-	except urllib2.URLError:
+	except:
 		time.sleep(30)
