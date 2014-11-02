@@ -8,4 +8,5 @@ while True:
 		urllib2.urlopen("http://cs4720.cs.virginia.edu/ipregistration/?pokemon=Natu&ip=" + ip)
 		sys.exit(0)
 	except:
-		time.sleep(30)
+        print "Failed to connect."
+		time.sleep(1)
