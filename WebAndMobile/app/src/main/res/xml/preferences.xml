@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    	<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    	    <PreferenceCategory
+    	        android:title="Settings"
+    	        android:key="first_category">
+
+    	        <EditTextPreference
+    	            android:key="ip_destination"
+    	            android:title="Destination IP address"
+    	            android:summary="IP address of destination\nDoes not include 'http://' or '/rpi'"
+    	            android:defaultValue="127.0.0.1"
+    	        />
+
+    	    </PreferenceCategory>
+
+    	</PreferenceScreen>
