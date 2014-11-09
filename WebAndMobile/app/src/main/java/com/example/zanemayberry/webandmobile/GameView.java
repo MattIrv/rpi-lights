@@ -25,7 +25,7 @@ import java.lang.InterruptedException;import java.lang.Override;import java.lang
  * TODO: document your custom view class.
  */
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread gameThread;
+    public GameThread gameThread;
     private Paint playerPaint;
     private Paint bluePaint;
     private Paint whitePaint;
@@ -33,10 +33,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint redPaint;
 
 
-    public GameView(Context context) {
+    public GameView(Context context, int width, int height) {
         super(context);
         getHolder().addCallback(this);
-        gameThread = new GameThread(getHolder(), this);
+        gameThread = new GameThread(getHolder(), this, width, height);
         setFocusable(true);
         playerPaint = new Paint();
         bluePaint = new Paint();
@@ -56,7 +56,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
    	public void surfaceCreated(SurfaceHolder holder) {
         gameThread.setRunning(true);
-        gameThread.start();
+        try {
+            gameThread.start();
+        }
+        catch (IllegalThreadStateException e) {
+            // Thread was already started nbd
+        }
     }
 
     @Override
