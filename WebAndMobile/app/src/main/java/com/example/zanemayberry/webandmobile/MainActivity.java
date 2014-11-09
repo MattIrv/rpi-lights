@@ -30,6 +30,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = new Intent(getBaseContext(), GameActivity.class);
+        startActivity(intent);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final SeekBar redbar = (SeekBar) findViewById(R.id.redbar);
