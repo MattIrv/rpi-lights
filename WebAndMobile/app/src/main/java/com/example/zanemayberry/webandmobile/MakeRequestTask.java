@@ -17,7 +17,6 @@ import java.io.IOException;
  */
 public class MakeRequestTask {
     public static void makeRequest(String url, int red, int green, int blue, double intensity) throws IOException {
-        System.out.println(url);
         HttpClient client = new DefaultHttpClient();
         HttpPost request = new HttpPost(url);
         JSONObject singleLight = new JSONObject();

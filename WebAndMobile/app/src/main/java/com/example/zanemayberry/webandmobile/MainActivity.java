@@ -49,7 +49,8 @@ public class MainActivity extends Activity {
                         try {
                             MakeRequestTask.makeRequest(url, red, green, blue, intensity);
                         } catch (IOException e) {
-                            showAlert();
+                            System.out.println(e);
+//                            showAlert();
                         }
                     }
                 });
@@ -87,10 +88,10 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showAlert() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String message = "Failed to send to http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
-        System.out.println(message);
+//    public void showAlert() {
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+//        String message = "Failed to send to http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
+//        System.out.println(message);
 //        new AlertDialog.Builder(this)
 //                .setTitle("Error")
 //                .setMessage(message)
@@ -99,6 +100,6 @@ public class MainActivity extends Activity {
 //                        d.dismiss();
 //                    }})
 //                .show();
-    }
+//    }
 
 }
