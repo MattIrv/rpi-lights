@@ -54,28 +54,28 @@ public class GameThread extends Thread {
     }
 
     private boolean checkX() {
-        if (gameState.playerPosX + 10*roll + 50 > width) {
-            if (gameState.playerPosX + 50 > width)
-                gameState.playerPosX = width - 51;
+        if (gameState.playerPosX + 10*roll + gameState.playerSize > width) {
+            if (gameState.playerPosX + gameState.playerSize > width)
+                gameState.playerPosX = width - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosX + 10*roll < 50) {
-            if (gameState.playerPosX < 50)
-                gameState.playerPosX = 51;
+        if (gameState.playerPosX + 10*roll < gameState.playerSize) {
+            if (gameState.playerPosX < gameState.playerSize)
+                gameState.playerPosX = (gameState.playerSize+1);
             return false;
         }
         return true;
     }
 
     private boolean checkY() {
-        if (gameState.playerPosY - 10*pitch + 50 > height) {
-            if (gameState.playerPosY + 50 > height)
-                gameState.playerPosY = height - 51;
+        if (gameState.playerPosY - 10*pitch + gameState.playerSize > height) {
+            if (gameState.playerPosY + gameState.playerSize > height)
+                gameState.playerPosY = height - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosY - 10*pitch < 50) {
-            if (gameState.playerPosY < 50)
-                gameState.playerPosY = 51;
+        if (gameState.playerPosY - 10*pitch < gameState.playerSize) {
+            if (gameState.playerPosY < gameState.playerSize)
+                gameState.playerPosY = (gameState.playerSize+1);
             return false;
         }
         return true;
