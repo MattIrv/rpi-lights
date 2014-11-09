@@ -90,38 +90,42 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         return super.onTouchEvent(event);
     }
 
-    public void render(Canvas canvas, GameState gameState) {
+    public void render(Canvas canvas, GameState gameState, long count) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        final String url = "http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
+        //final String url = "http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
+        final String url = "http://128.143.24.101/rpi";
         float widthDiv2 = (float)(getWidth() / 2.0);
         float heightDiv2 = (float)(getHeight() / 2.0);
-        int redVal = (int)Math.max(255.0 * ((gameState.playerPosX - widthDiv2)/ widthDiv2), 0.0);
+        int redVal = (int)Math.max(255.0 * ((gameState.playerPosX - widthDiv2)/ widthDiv2), 50);
         float whiteVal = (float)Math.max(-(gameState.playerPosX - widthDiv2)/ widthDiv2, 0.0);
-        int greenVal = (int)Math.max(255.0 * ((gameState.playerPosX - heightDiv2)/ heightDiv2), 0.0);
-        int blueVal = (int)Math.max(255.0 * (-(gameState.playerPosX - heightDiv2)/ heightDiv2), 0.0);
+        int greenVal = (int)Math.max(255.0 * ((gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
+        int blueVal = (int)Math.max(255.0 * (-(gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
         redVal += whiteVal * (255 - redVal);
         greenVal += whiteVal * (255 - greenVal);
         blueVal += whiteVal * (255 - blueVal);
         playerPaint.setARGB(255, redVal, greenVal, blueVal);
         canvas.drawColor(Color.BLACK);
         canvas.drawCircle(gameState.playerPosX, gameState.playerPosY, gameState.playerSize, playerPaint);
-        canvas.drawRect(50f, 0f, (float) getWidth() - 50f, 50f, bluePaint);
-        canvas.drawRect(50f, (float) getHeight() - 50f, (float) getWidth() - 50f, (float) getHeight(), greenPaint);
+        canvas.drawRect(0f, 0f, (float) getWidth(), 50f, bluePaint);
+        canvas.drawRect(0f, (float) getHeight() - 50f, (float) getWidth(), (float) getHeight(), greenPaint);
         canvas.drawRect(0f, 50f, 50f, (float) getHeight() - 50f, whitePaint);
         canvas.drawRect((float)getWidth() - 50f, 50f, (float)getWidth(), (float)getHeight() - 50f, redPaint);
-//        final int red = redVal;
-//        final int green = greenVal;
-//        final int blue = blueVal;
-//        Thread thread = new Thread(new Runnable() {
-//            public void run() {
-//                try {
-//                    MakeRequestTask.makeRequest(url, red, green, blue, 1.0);
-//                } catch (IOException e) {
-//                    System.out.println(e);
-////                            showAlert();
-//                }
-//            }
-//        });
+        if (count % 70 == 0) {
+            final int red = redVal;
+            final int green = greenVal;
+            final int blue = blueVal;
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        MakeRequestTask.makeRequest(url, red, green, blue, 1.0);
+                    } catch (IOException e) {
+                        System.out.println(e);
+    //                            showAlert();
+                    }
+                }
+            });
+            thread.start();
+        }
     }
 
     @Override

@@ -43,7 +43,7 @@ public class GameThread extends Thread {
             System.out.println("TickCount: " + tickCount);
             Canvas canvas = this.surfaceHolder.lockCanvas();
             tickCount++;
-            gameView.render(canvas, gameState);
+            gameView.render(canvas, gameState, tickCount);
             surfaceHolder.unlockCanvasAndPost(canvas);
             if (checkX())
                 gameState.playerPosX += 10*roll;
@@ -54,12 +54,12 @@ public class GameThread extends Thread {
     }
 
     private boolean checkX() {
-        if (gameState.playerPosX + 10*roll + gameState.playerSize > width) {
+        if (gameState.playerPosX + 10*roll + gameState.playerSize > width - 50) {
             if (gameState.playerPosX + gameState.playerSize > width)
                 gameState.playerPosX = width - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosX + 10*roll < gameState.playerSize) {
+        if (gameState.playerPosX + 10*roll < gameState.playerSize + 50) {
             if (gameState.playerPosX < gameState.playerSize)
                 gameState.playerPosX = (gameState.playerSize+1);
             return false;
@@ -68,12 +68,12 @@ public class GameThread extends Thread {
     }
 
     private boolean checkY() {
-        if (gameState.playerPosY - 10*pitch + gameState.playerSize > height) {
+        if (gameState.playerPosY - 10*pitch + gameState.playerSize > height - 50) {
             if (gameState.playerPosY + gameState.playerSize > height)
                 gameState.playerPosY = height - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosY - 10*pitch < gameState.playerSize) {
+        if (gameState.playerPosY - 10*pitch < gameState.playerSize + 50) {
             if (gameState.playerPosY < gameState.playerSize)
                 gameState.playerPosY = (gameState.playerSize+1);
             return false;
