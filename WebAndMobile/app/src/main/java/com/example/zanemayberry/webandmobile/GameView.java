@@ -19,13 +19,13 @@ import android.view.View;import java.lang.InterruptedException;import java.lang.
  * TODO: document your custom view class.
  */
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private GameThread gameThread;
+    public GameThread gameThread;
     private Paint playerPaint;
 
-    public GameView(Context context) {
+    public GameView(Context context, int width, int height) {
         super(context);
         getHolder().addCallback(this);
-        gameThread = new GameThread(getHolder(), this);
+        gameThread = new GameThread(getHolder(), this, width, height);
         setFocusable(true);
         this.playerPaint = new Paint();
         playerPaint.setARGB(255, 0, 255, 0);
@@ -37,7 +37,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
    	public void surfaceCreated(SurfaceHolder holder) {
         gameThread.setRunning(true);
-        gameThread.start();
+        try {
+            gameThread.start();
+        }
+        catch (IllegalThreadStateException e) {
+            // Thread was already started nbd
+        }
     }
 
     @Override
