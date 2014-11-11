@@ -1,5 +1,4 @@
-package com.example.student.mkyongtutorial;
-
+package com.example.zanemayberry.webandmobile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,7 @@ public class AppActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                Intent intent = new Intent(context, App2Activity.class);
+                Intent intent = new Intent(context, GameActivity.class);
                 startActivity(intent);
 
             }
@@ -76,7 +75,7 @@ public class AppActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                Intent intent = new Intent(context, App2Activity.class);
+                Intent intent = new Intent(context, Prefs.class);
                 startActivity(intent);
 
             }

@@ -1,5 +1,4 @@
-package com.example.student.mkyongtutorial;
-
+package com.example.zanemayberry.webandmobile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

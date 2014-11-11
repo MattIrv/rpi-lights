@@ -92,8 +92,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void render(Canvas canvas, GameState gameState, long count) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        //final String url = "http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
-        final String url = "http://128.143.24.101/rpi";
+        final String url = "http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
         float widthDiv2 = (float)(getWidth() / 2.0);
         float heightDiv2 = (float)(getHeight() / 2.0);
         int redVal = (int)Math.max(255.0 * ((gameState.playerPosX - widthDiv2)/ widthDiv2), 50);
