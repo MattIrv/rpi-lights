@@ -49,7 +49,6 @@ public class ScoreScreen extends Activity {
         final Button playAgain = (Button) findViewById(R.id.btn_play_again);
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
         lb = (LoginButton) findViewById(R.id.authButton);
-        lb.setLoginBehavior();
         lb.setPublishPermissions(Arrays.asList("publish_actions"));
         playAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,39 +103,35 @@ public class ScoreScreen extends Activity {
     }
 
     public void shareFacebookHighScore(int score) {
-        /*if (!loggedIn) {
+        if (!loggedIn) {
             sharingHighScore = true;
             try {
                 lb.callOnClick();
             }
             catch (Exception e) {
-                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed to share with Facebook.", Toast.LENGTH_LONG).show();
             }
         }
         else {
             sharingHighScore = false;
             publishFeedDialog("I just set a new high score of " + highScore + " on SlideBall!");
-        } */
-        sharingHighScore = false;
-        publishFeedDialog("I just set a new high score of " + highScore + " on SlideBall!");
+        }
     }
 
     public void shareFacebookScore(int score) {
-        /*if (!loggedIn) {
+        if (!loggedIn) {
             sharingScore = true;
             try {
                 lb.callOnClick();
             }
             catch (Exception e) {
-                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed to share with Facebook.", Toast.LENGTH_LONG).show();
             }
         }
         else {
             sharingScore = false;
             publishFeedDialog("I just scored " + score + " on SlideBall!");
-        }*/
-        sharingScore = false;
-        publishFeedDialog("I just scored " + score + " on SlideBall!");
+        }
     }
 
     @Override
