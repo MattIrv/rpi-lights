@@ -36,9 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
-        android:layout_above="@+id/tv_high_score"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
+        android:layout_below="@+id/tv_score"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginTop="51dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,21 +47,20 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="New High Score!"
         android:id="@+id/tv_high_score"
-        android:layout_above="@+id/btn_fb"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="38dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_below="@+id/ratingBar"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Share on Facebook"
         android:id="@+id/btn_fb"
-        android:layout_marginBottom="42dp"
-        android:layout_above="@+id/btn_play_again"
-        android:layout_centerHorizontal="true"
         android:padding="10dp"
-        android:background="#ffe0e0e0" />
+        android:background="#ffe0e0e0"
+        android:layout_below="@+id/tv_high_score"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -69,9 +69,9 @@
         android:id="@+id/btn_play_again"
         android:padding="10dp"
         android:background="#ffe0e0e0"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/authButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp" />
+        android:layout_marginTop="45dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,5 +84,15 @@
         android:layout_below="@+id/textView2"
         android:layout_alignRight="@+id/btn_fb"
         android:layout_alignEnd="@+id/btn_fb" />
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignTop="@+id/btn_fb"
+        android:layout_toLeftOf="@+id/ratingBar"
+        android:layout_toStartOf="@+id/ratingBar"
+        android:visibility="invisible" />
 
 </RelativeLayout>
