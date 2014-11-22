@@ -31,6 +31,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint whitePaint;
     private Paint greenPaint;
     private Paint redPaint;
+    private Paint yellowPaint;
 
 
     public GameView(Context context, int width, int height) {
@@ -43,9 +44,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         whitePaint = new Paint();
         greenPaint = new Paint();
         redPaint = new Paint();
+        yellowPaint = new Paint();
         playerPaint.setARGB(255, 255, 255, 0);
         bluePaint.setARGB(255, 0, 0, 255);
         whitePaint.setARGB(255, 255, 255, 255);
+        whitePaint.setStyle(Paint.Style.FILL);
+        whitePaint.setTextSize(20.0f);
+        yellowPaint.setColor(Color.YELLOW);
         greenPaint.setARGB(255, 0, 255, 0);
         redPaint.setARGB(255, 255, 0, 0);
     }
@@ -102,13 +107,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         redVal += whiteVal * (255 - redVal);
         greenVal += whiteVal * (255 - greenVal);
         blueVal += whiteVal * (255 - blueVal);
-        playerPaint.setARGB(255, redVal, greenVal, blueVal);
+        //playerPaint.setARGB(255, redVal, greenVal, blueVal);
+        if (!gameState.isBlinked) {
+            playerPaint.setColor(gameState.curDir.getColor());
+        } else {
+            playerPaint.setColor(gameState.nextDir.getColor());
+        }
         canvas.drawColor(Color.BLACK);
         canvas.drawCircle(gameState.playerPosX, gameState.playerPosY, gameState.playerSize, playerPaint);
-        canvas.drawRect(0f, 0f, (float) getWidth(), 50f, bluePaint);
-        canvas.drawRect(0f, (float) getHeight() - 50f, (float) getWidth(), (float) getHeight(), greenPaint);
-        canvas.drawRect(0f, 50f, 50f, (float) getHeight() - 50f, whitePaint);
-        canvas.drawRect((float)getWidth() - 50f, 50f, (float)getWidth(), (float)getHeight() - 50f, redPaint);
+        for (EnemyState enemy : gameState.enemyStateList) {
+            canvas.drawCircle(enemy.posX, enemy.posY, enemy.size, yellowPaint);
+        }
+        canvas.drawRect(0f, 0f, (float) getWidth(), gameState.edgeSize, bluePaint);
+        canvas.drawRect(0f, (float) getHeight() - gameState.edgeSize, (float) getWidth(), (float) getHeight(), greenPaint);
+        canvas.drawRect(0f, gameState.edgeSize, gameState.edgeSize, (float) getHeight() - gameState.edgeSize, whitePaint);
+        canvas.drawRect((float)getWidth() - gameState.edgeSize, gameState.edgeSize, (float)getWidth(), (float)getHeight() - gameState.edgeSize, redPaint);
+        canvas.drawText("Score: " + gameState.score, 100.0f, 100.0f, whitePaint);
         if (count % 70 == 0) {
             final int red = redVal;
             final int green = greenVal;

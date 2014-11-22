@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;import java.lang.Override;import java.lang.System;import java.lang.Thread;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by zanemayberry on 11/9/14.
@@ -16,6 +18,12 @@ public class GameThread extends Thread {
     float roll = 0;
     int width = 0;
     int height = 0;
+    int playerSpeed = 10;
+    int gravitySpeed = 5;
+    boolean isChangingSoon = false;
+    long lastBlink = 0;
+    long lastSpawn = 0;
+
 
     public GameThread(SurfaceHolder surfaceHolder, GameView gameView, int width, int height) {
         super();
@@ -27,7 +35,13 @@ public class GameThread extends Thread {
         this.height = height;
         this.gameState.playerPosX = (float) (width/2 - 25);
         this.gameState.playerPosY = (float) (height/2 - 25);
-        this.gameState.playerSize = 50.0f;
+        this.gameState.playerSize = 25.0f;
+        this.gameState.score = 0;
+        this.gameState.curDir = Direction.random();
+        this.gameState.nextDir = this.gameState.curDir.diffRandom();
+        this.gameState.timeOfChange = System.currentTimeMillis() + 6000;
+        this.gameState.isBlinked = false;
+        this.gameState.enemyStateList = new ArrayList<EnemyState>();
     }
 
     private boolean running;
@@ -40,26 +54,81 @@ public class GameThread extends Thread {
         long tickCount = 0L;
         System.out.println("Starting game loop...");
         while (running) {
-            System.out.println("TickCount: " + tickCount);
+            //System.out.println("TickCount: " + tickCount);
             Canvas canvas = this.surfaceHolder.lockCanvas();
             tickCount++;
+            gameState.score++;
             gameView.render(canvas, gameState, tickCount);
             surfaceHolder.unlockCanvasAndPost(canvas);
-            if (checkX())
-                gameState.playerPosX += 10*roll;
-            if (checkY())
-                gameState.playerPosY -= 10*pitch;
+            if (checkX()) {
+                gameState.playerPosX += playerSpeed * roll
+                        + gravitySpeed * gameState.curDir.hComponent();
+            } else {
+                return;
+            }
+            if (checkY()) {
+                gameState.playerPosY -= playerSpeed * pitch
+                        + gravitySpeed * gameState.curDir.vComponent();
+            } else {
+                return;
+            }
+            for (int i = gameState.enemyStateList.size() - 1; i >= 0; i--) {
+                EnemyState eState = gameState.enemyStateList.get(i);
+                eState.posX += gravitySpeed * gameState.curDir.hComponent();
+                eState.posY -= gravitySpeed * gameState.curDir.vComponent();
+                if (eState.posX > width || eState.posX < 0 || eState.posY > height || eState.posY < 0) {
+                    gameState.enemyStateList.remove(i);
+                } else if (doesCollide(eState)) {
+                    return;
+                }
+            }
+            if (this.gameState.timeOfChange - System.currentTimeMillis() < 3000) {
+                isChangingSoon = true;
+            }
+            if (isChangingSoon) {
+                if (System.currentTimeMillis() - lastBlink > 500) {
+                    this.gameState.isBlinked = !this.gameState.isBlinked;
+                    lastBlink = System.currentTimeMillis();
+                }
+            }
+            if (System.currentTimeMillis() > lastSpawn + 400) {
+                EnemyState newEnemy = new EnemyState();
+                newEnemy.size = 25;
+                Random randy = new Random();
+                if (this.gameState.curDir == Direction.UP) {
+                    newEnemy.posX = randy.nextInt(width - 2 * gameState.edgeSize - 2 * newEnemy.size) + gameState.edgeSize + newEnemy.size;
+                    newEnemy.posY = height;
+                } else if (this.gameState.curDir == Direction.RIGHT) {
+                    newEnemy.posX = 0;
+                    newEnemy.posY = randy.nextInt(height - 2 * gameState.edgeSize - 2 * newEnemy.size) + gameState.edgeSize + newEnemy.size;
+                } else if (this.gameState.curDir == Direction.DOWN) {
+                    newEnemy.posX = randy.nextInt(width - 2 * gameState.edgeSize - 2 * newEnemy.size) + gameState.edgeSize + newEnemy.size;
+                    newEnemy.posY = 0;
+                } else if (this.gameState.curDir == Direction.LEFT) {
+                    newEnemy.posX = width;
+                    newEnemy.posY = randy.nextInt(height - 2 * gameState.edgeSize - 2 * newEnemy.size) + gameState.edgeSize + newEnemy.size;
+                }
+                gameState.enemyStateList.add(newEnemy);
+                lastSpawn = System.currentTimeMillis();
+            }
+            if (this.gameState.timeOfChange < System.currentTimeMillis()) {
+                this.gameState.curDir = this.gameState.nextDir;
+                this.gameState.nextDir = this.gameState.curDir.diffRandom();
+                this.gameState.timeOfChange += 6000;
+                this.gameState.isBlinked = false;
+                isChangingSoon = false;
+            }
         }
         System.out.println("Loop Executed " + tickCount + " times.");
     }
 
     private boolean checkX() {
-        if (gameState.playerPosX + 10*roll + gameState.playerSize > width - 50) {
+        if (gameState.playerPosX + playerSpeed*roll + gameState.playerSize > width - gameState.edgeSize) {
             if (gameState.playerPosX + gameState.playerSize > width)
                 gameState.playerPosX = width - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosX + 10*roll < gameState.playerSize + 50) {
+        if (gameState.playerPosX + playerSpeed*roll < gameState.playerSize + gameState.edgeSize) {
             if (gameState.playerPosX < gameState.playerSize)
                 gameState.playerPosX = (gameState.playerSize+1);
             return false;
@@ -68,17 +137,26 @@ public class GameThread extends Thread {
     }
 
     private boolean checkY() {
-        if (gameState.playerPosY - 10*pitch + gameState.playerSize > height - 50) {
+        if (gameState.playerPosY - playerSpeed*pitch + gameState.playerSize > height - gameState.edgeSize) {
             if (gameState.playerPosY + gameState.playerSize > height)
                 gameState.playerPosY = height - (gameState.playerSize+1);
             return false;
         }
-        if (gameState.playerPosY - 10*pitch < gameState.playerSize + 50) {
+        if (gameState.playerPosY - playerSpeed*pitch < gameState.playerSize + gameState.edgeSize) {
             if (gameState.playerPosY < gameState.playerSize)
                 gameState.playerPosY = (gameState.playerSize+1);
             return false;
         }
         return true;
+    }
+
+    private boolean doesCollide(EnemyState eState) {
+        float deltaX = gameState.playerPosX - eState.posX;
+        float deltaY = gameState.playerPosY - eState.posY;
+        if (Math.hypot(deltaX, deltaY) < eState.size + gameState.playerSize) {
+            return true;
+        }
+        return false;
     }
 
     public void updateOrientation(float[] orientationVec) {
