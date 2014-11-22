@@ -37,8 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
         android:layout_above="@+id/tv_high_score"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -82,7 +81,6 @@
         android:textColor="#ffffffff"
         android:textSize="50dp"
         android:layout_below="@+id/textView2"
-        android:layout_alignRight="@+id/btn_fb"
-        android:layout_alignEnd="@+id/btn_fb" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
