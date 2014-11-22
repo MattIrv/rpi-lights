@@ -2,6 +2,7 @@ package com.example.zanemayberry.webandmobile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -32,10 +33,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint greenPaint;
     private Paint redPaint;
     private Paint yellowPaint;
+    private Context context;
 
 
     public GameView(Context context, int width, int height) {
         super(context);
+        this.context = context;
         getHolder().addCallback(this);
         gameThread = new GameThread(getHolder(), this, width, height);
         setFocusable(true);
@@ -53,6 +56,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         yellowPaint.setColor(Color.YELLOW);
         greenPaint.setARGB(255, 0, 255, 0);
         redPaint.setARGB(255, 255, 0, 0);
+    }
+
+    public void gameOver(GameState gameState) {
+        Intent intent = new Intent(context, ScoreScreen.class);
+        intent.putExtra("score", gameState.score);
+        context.startActivity(intent);
     }
 
     @Override

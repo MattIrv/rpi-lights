@@ -1,5 +1,6 @@
 package com.example.zanemayberry.webandmobile;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.view.Display;
 import android.view.Surface;
@@ -64,12 +65,14 @@ public class GameThread extends Thread {
                 gameState.playerPosX += playerSpeed * roll
                         + gravitySpeed * gameState.curDir.hComponent();
             } else {
+                gameView.gameOver(gameState);
                 return;
             }
             if (checkY()) {
                 gameState.playerPosY -= playerSpeed * pitch
                         + gravitySpeed * gameState.curDir.vComponent();
             } else {
+                gameView.gameOver(gameState);
                 return;
             }
             for (int i = gameState.enemyStateList.size() - 1; i >= 0; i--) {
@@ -79,6 +82,7 @@ public class GameThread extends Thread {
                 if (eState.posX > width || eState.posX < 0 || eState.posY > height || eState.posY < 0) {
                     gameState.enemyStateList.remove(i);
                 } else if (doesCollide(eState)) {
+                    gameView.gameOver(gameState);
                     return;
                 }
             }
