@@ -19,13 +19,14 @@ public class GameThread extends Thread {
     float roll = 0;
     int width = 0;
     int height = 0;
+    int rotation = 0;
     int playerSpeed = 10;
     int gravitySpeed = 5;
     long lastBlink = 0;
     long lastSpawn = 0;
 
 
-    public GameThread(SurfaceHolder surfaceHolder, GameView gameView, int width, int height) {
+    public GameThread(SurfaceHolder surfaceHolder, GameView gameView, int width, int height, int rotation) {
         super();
         System.out.println("Thread initialized.");
         this.surfaceHolder = surfaceHolder;
@@ -33,6 +34,7 @@ public class GameThread extends Thread {
         this.gameState = new GameState();
         this.width = width;
         this.height = height;
+        this.rotation = rotation;
         this.gameState.playerPosX = (float) (width/2 - 25);
         this.gameState.playerPosY = (float) (height/2 - 25);
         this.gameState.playerSize = 25.0f;
@@ -167,7 +169,12 @@ public class GameThread extends Thread {
 
     public void updateOrientation(float[] orientationVec) {
         // Azimuth, Pitch, Roll
-        pitch = orientationVec[1];
-        roll = orientationVec[2];
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+            pitch = orientationVec[2];
+            roll = orientationVec[1];
+        } else {
+            pitch = orientationVec[1];
+            roll = orientationVec[2];
+        }
     }
 }

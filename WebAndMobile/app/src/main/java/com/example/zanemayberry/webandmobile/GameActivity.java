@@ -48,7 +48,8 @@ public class GameActivity extends Activity implements SensorEventListener {
         Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
-        gv = new GameView(this, width, height);
+        int rotation = display.getRotation();
+        gv = new GameView(this, width, height, rotation);
         setContentView(gv);
 
         // Set up an instance of SystemUiHider to control the system UI for

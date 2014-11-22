@@ -36,11 +36,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Context context;
 
 
-    public GameView(Context context, int width, int height) {
+    public GameView(Context context, int width, int height, int rotation) {
         super(context);
         this.context = context;
         getHolder().addCallback(this);
-        gameThread = new GameThread(getHolder(), this, width, height);
+        gameThread = new GameThread(getHolder(), this, width, height, rotation);
         setFocusable(true);
         playerPaint = new Paint();
         bluePaint = new Paint();
