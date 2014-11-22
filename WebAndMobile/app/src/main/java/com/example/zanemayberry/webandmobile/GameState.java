@@ -18,4 +18,6 @@ public class GameState {
     public boolean isBlinked;
     public ArrayList<EnemyState> enemyStateList;
     public int edgeSize = 50;
+    public boolean updateLights = true;
+    public boolean isChangingSoon = false;
 }

@@ -107,16 +107,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void render(Canvas canvas, GameState gameState, long count) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         final String url = "http://" + sharedPref.getString("ip_destination", "127.0.0.1") + "/rpi";
-        float widthDiv2 = (float)(getWidth() / 2.0);
-        float heightDiv2 = (float)(getHeight() / 2.0);
-        int redVal = (int)Math.max(255.0 * ((gameState.playerPosX - widthDiv2)/ widthDiv2), 50);
-        float whiteVal = (float)Math.max(-(gameState.playerPosX - widthDiv2)/ widthDiv2, 0.0);
-        int greenVal = (int)Math.max(255.0 * ((gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
-        int blueVal = (int)Math.max(255.0 * (-(gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
-        redVal += whiteVal * (255 - redVal);
-        greenVal += whiteVal * (255 - greenVal);
-        blueVal += whiteVal * (255 - blueVal);
-        //playerPaint.setARGB(255, redVal, greenVal, blueVal);
+//        float widthDiv2 = (float)(getWidth() / 2.0);
+//        float heightDiv2 = (float)(getHeight() / 2.0);
+//        int redVal = (int)Math.max(255.0 * ((gameState.playerPosX - widthDiv2)/ widthDiv2), 50);
+//        float whiteVal = (float)Math.max(-(gameState.playerPosX - widthDiv2)/ widthDiv2, 0.0);
+//        int greenVal = (int)Math.max(255.0 * ((gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
+//        int blueVal = (int)Math.max(255.0 * (-(gameState.playerPosY - heightDiv2)/ heightDiv2), 50);
+//        redVal += whiteVal * (255 - redVal);
+//        greenVal += whiteVal * (255 - greenVal);
+//        blueVal += whiteVal * (255 - blueVal);
+//        playerPaint.setARGB(255, redVal, greenVal, blueVal);
         if (!gameState.isBlinked) {
             playerPaint.setColor(gameState.curDir.getColor());
         } else {
@@ -132,17 +132,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawRect(0f, gameState.edgeSize, gameState.edgeSize, (float) getHeight() - gameState.edgeSize, whitePaint);
         canvas.drawRect((float)getWidth() - gameState.edgeSize, gameState.edgeSize, (float)getWidth(), (float)getHeight() - gameState.edgeSize, redPaint);
         canvas.drawText("Score: " + gameState.score, 100.0f, 100.0f, whitePaint);
-        if (count % 70 == 0) {
-            final int red = redVal;
-            final int green = greenVal;
-            final int blue = blueVal;
+        if (gameState.updateLights) {
+            gameState.updateLights = false;
+            final Direction curDir = gameState.curDir;
+            final Direction nextDir = gameState.nextDir;
+            int mode = 0;
+            if (gameState.isChangingSoon) {
+                mode++;
+                if (gameState.isBlinked) {
+                    mode++;
+                }
+            }
+            final int finalMode = mode;
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        MakeRequestTask.makeRequest(url, red, green, blue, 1.0);
+                        MakeRequestTask.makeRequest(url, curDir, nextDir, finalMode);
                     } catch (IOException e) {
                         System.out.println(e);
-    //                            showAlert();
                     }
                 }
             });

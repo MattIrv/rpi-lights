@@ -13,21 +13,39 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.LoginButton;
+
+import java.util.Arrays;
+
 
 public class ScoreScreen extends Activity {
 
     static int highScore = 0;
+    static boolean loggedIn = false;
+    static boolean sharingHighScore = false;
+    static boolean sharingScore = false;
+    static int score = 0;
+
+    LoginButton lb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_screen);
-        final int score = getIntent().getExtras().getInt("score");
+        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
+        score = getIntent().getExtras().getInt("score");
         final TextView tvScore = (TextView) findViewById(R.id.tv_score);
         final TextView tvHighScore = (TextView) findViewById(R.id.tv_high_score);
         final Button shareButton = (Button) findViewById(R.id.btn_fb);
         final Button playAgain = (Button) findViewById(R.id.btn_play_again);
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
+        lb = (LoginButton) findViewById(R.id.authButton);
+        lb.setPublishPermissions(Arrays.asList("publish_actions"));
         playAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,8 +71,11 @@ public class ScoreScreen extends Activity {
         else if (score > 1000) {
             rb.setNumStars(1);
         }
+        if (score > 1000) {
+            rb.setVisibility(View.VISIBLE);
+        }
         else {
-            rb.setNumStars(0);
+            rb.setVisibility(View.INVISIBLE);
         }
         if (score > highScore) {
             highScore = score;
@@ -78,11 +99,51 @@ public class ScoreScreen extends Activity {
     }
 
     public void shareFacebookHighScore(int score) {
+        if (!loggedIn) {
+            sharingHighScore = true;
+            lb.callOnClick();
+        }
+        else {
+            sharingHighScore = false;
+            if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
+                    FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+                // Publish the post using the Share Dialog
+                FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+                        .setApplicationName("SlideBall")
+                        .setDescription("I just set a new high score of " + score + " on SlideBall!")
+                        .setCaption("Click to download SlideBall for your Android device.")
+                        .setLink("http://people.virginia.edu/~mji7wb/app-release-ms5.apk")
+                        .build();
+                uiHelper.trackPendingDialogCall(shareDialog.present());
 
+            } else {
+                // Fallback. For example, publish the post using the Feed Dialog
+            }
+        }
     }
 
     public void shareFacebookScore(int score) {
+        if (!loggedIn) {
+            sharingScore = true;
+            lb.callOnClick();
+        }
+        else {
+            sharingScore = false;
+            if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
+                    FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+                // Publish the post using the Share Dialog
+                FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+                        .setApplicationName("SlideBall")
+                        .setDescription("I just set a new high score of " + score + " on SlideBall!")
+                        .setCaption("Click to download SlideBall for your Android device.")
+                        .setLink("http://people.virginia.edu/~mji7wb/app-release-ms5.apk")
+                        .build();
+                uiHelper.trackPendingDialogCall(shareDialog.present());
 
+            } else {
+                // Fallback. For example, publish the post using the Feed Dialog
+            }
+        }
     }
 
     @Override
@@ -103,4 +164,64 @@ public class ScoreScreen extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (state.isOpened()) {
+            loggedIn = true;
+            if (sharingHighScore) {
+                shareFacebookHighScore(highScore);
+            }
+            if (sharingScore) {
+                shareFacebookScore(score);
+            }
+        } else if (state.isClosed()) {
+            loggedIn = false;
+        }
+    }
+
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private UiLifecycleHelper uiHelper;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Session session = Session.getActiveSession();
+        if (session != null &&
+                (session.isOpened() || session.isClosed()) ) {
+            onSessionStateChange(session, session.getState(), null);
+        }
+
+        uiHelper.onResume();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
 }
