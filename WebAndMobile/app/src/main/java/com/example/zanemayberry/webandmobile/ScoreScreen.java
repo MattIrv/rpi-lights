@@ -12,12 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
+import com.facebook.widget.WebDialog;
 
 import java.util.Arrays;
 
@@ -45,6 +49,7 @@ public class ScoreScreen extends Activity {
         final Button playAgain = (Button) findViewById(R.id.btn_play_again);
         final RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
         lb = (LoginButton) findViewById(R.id.authButton);
+        lb.setLoginBehavior();
         lb.setPublishPermissions(Arrays.asList("publish_actions"));
         playAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,51 +104,39 @@ public class ScoreScreen extends Activity {
     }
 
     public void shareFacebookHighScore(int score) {
-        if (!loggedIn) {
+        /*if (!loggedIn) {
             sharingHighScore = true;
-            lb.callOnClick();
+            try {
+                lb.callOnClick();
+            }
+            catch (Exception e) {
+                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed.", Toast.LENGTH_LONG).show();
+            }
         }
         else {
             sharingHighScore = false;
-            if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
-                    FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                // Publish the post using the Share Dialog
-                FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-                        .setApplicationName("SlideBall")
-                        .setDescription("I just set a new high score of " + score + " on SlideBall!")
-                        .setCaption("Click to download SlideBall for your Android device.")
-                        .setLink("http://people.virginia.edu/~mji7wb/app-release-ms5.apk")
-                        .build();
-                uiHelper.trackPendingDialogCall(shareDialog.present());
-
-            } else {
-                // Fallback. For example, publish the post using the Feed Dialog
-            }
-        }
+            publishFeedDialog("I just set a new high score of " + highScore + " on SlideBall!");
+        } */
+        sharingHighScore = false;
+        publishFeedDialog("I just set a new high score of " + highScore + " on SlideBall!");
     }
 
     public void shareFacebookScore(int score) {
-        if (!loggedIn) {
+        /*if (!loggedIn) {
             sharingScore = true;
-            lb.callOnClick();
+            try {
+                lb.callOnClick();
+            }
+            catch (Exception e) {
+                Toast.makeText(ScoreScreen.this, "You must have the Facebook app installed.", Toast.LENGTH_LONG).show();
+            }
         }
         else {
             sharingScore = false;
-            if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
-                    FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-                // Publish the post using the Share Dialog
-                FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
-                        .setApplicationName("SlideBall")
-                        .setDescription("I just set a new high score of " + score + " on SlideBall!")
-                        .setCaption("Click to download SlideBall for your Android device.")
-                        .setLink("http://people.virginia.edu/~mji7wb/app-release-ms5.apk")
-                        .build();
-                uiHelper.trackPendingDialogCall(shareDialog.present());
-
-            } else {
-                // Fallback. For example, publish the post using the Feed Dialog
-            }
-        }
+            publishFeedDialog("I just scored " + score + " on SlideBall!");
+        }*/
+        sharingScore = false;
+        publishFeedDialog("I just scored " + score + " on SlideBall!");
     }
 
     @Override
@@ -222,6 +215,55 @@ public class ScoreScreen extends Activity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
+    }
+
+    private void publishFeedDialog(String msg) {
+        Bundle params = new Bundle();
+        params.putString("name", "SlideBall");
+        params.putString("caption", "Click to download SlideBall for your Android device.");
+        params.putString("description", msg);
+        params.putString("link", "http://people.virginia.edu/~mji7wb/app-release-ms5.apk");
+        params.putString("picture", "http://people.virginia.edu/~mji7wb/SlideBall.png");
+
+        WebDialog feedDialog = (
+                new WebDialog.FeedDialogBuilder(ScoreScreen.this,
+                        Session.getActiveSession(),
+                        params))
+                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+
+                    @Override
+                    public void onComplete(Bundle values,
+                                           FacebookException error) {
+                        if (error == null) {
+                            // When the story is posted, echo the success
+                            // and the post Id.
+                            final String postId = values.getString("post_id");
+                            if (postId != null) {
+                                Toast.makeText(ScoreScreen.this,
+                                        "Posted story, id: " + postId,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                // User clicked the Cancel button
+                                Toast.makeText(getApplicationContext(),
+                                        "Publish cancelled",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (error instanceof FacebookOperationCanceledException) {
+                            // User clicked the "x" button
+                            Toast.makeText(getApplicationContext(),
+                                    "Publish cancelled",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Generic, ex: network error
+                            Toast.makeText(getApplicationContext(),
+                                    "Error posting story",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                })
+                .build();
+        feedDialog.show();
     }
 
 }
