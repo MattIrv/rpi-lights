@@ -21,7 +21,6 @@ public class GameThread extends Thread {
     int height = 0;
     int playerSpeed = 10;
     int gravitySpeed = 5;
-    boolean isChangingSoon = false;
     long lastBlink = 0;
     long lastSpawn = 0;
 
@@ -43,6 +42,7 @@ public class GameThread extends Thread {
         this.gameState.timeOfChange = System.currentTimeMillis() + 6000;
         this.gameState.isBlinked = false;
         this.gameState.enemyStateList = new ArrayList<EnemyState>();
+        this.gameState.isChangingSoon = false;
     }
 
     private boolean running;
@@ -87,12 +87,13 @@ public class GameThread extends Thread {
                 }
             }
             if (this.gameState.timeOfChange - System.currentTimeMillis() < 3000) {
-                isChangingSoon = true;
+                gameState.isChangingSoon = true;
             }
-            if (isChangingSoon) {
+            if (gameState.isChangingSoon) {
                 if (System.currentTimeMillis() - lastBlink > 500) {
                     this.gameState.isBlinked = !this.gameState.isBlinked;
                     lastBlink = System.currentTimeMillis();
+                    this.gameState.updateLights = true;
                 }
             }
             if (System.currentTimeMillis() > lastSpawn + 400) {
@@ -112,7 +113,7 @@ public class GameThread extends Thread {
                     newEnemy.posX = width;
                     newEnemy.posY = randy.nextInt(height - 2 * gameState.edgeSize - 2 * newEnemy.size) + gameState.edgeSize + newEnemy.size;
                 }
-                gameState.enemyStateList.add(newEnemy);
+                this.gameState.enemyStateList.add(newEnemy);
                 lastSpawn = System.currentTimeMillis();
             }
             if (this.gameState.timeOfChange < System.currentTimeMillis()) {
@@ -120,7 +121,8 @@ public class GameThread extends Thread {
                 this.gameState.nextDir = this.gameState.curDir.diffRandom();
                 this.gameState.timeOfChange += 6000;
                 this.gameState.isBlinked = false;
-                isChangingSoon = false;
+                this.gameState.isChangingSoon = false;
+                this.gameState.updateLights = true;
             }
         }
         System.out.println("Loop Executed " + tickCount + " times.");
