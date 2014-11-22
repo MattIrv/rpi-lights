@@ -4,7 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="#ffffff00">
 
     <TextView
         android:id="@+id/textView1"
@@ -12,7 +13,8 @@
         android:layout_height="wrap_content"
         android:text="SLIDE BALL"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32dp" />
+        android:textSize="50dp"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/button1"
@@ -20,7 +22,9 @@
         android:layout_height="wrap_content"
         android:text="BEGIN"
         android:layout_weight="0.33"
-        android:textSize="32dp" />
+        android:textSize="50dp"
+        android:background="#ffff0000"
+        android:textColor="#ffffffff" />
 
     <Button
         android:layout_width="match_parent"
@@ -28,7 +32,9 @@
         android:text="INSTRUCTIONS"
         android:id="@+id/button2"
         android:layout_weight="0.33"
-        android:textSize="32dp" />
+        android:textSize="50dp"
+        android:background="#ff00ff00"
+        android:textColor="#ffffffff" />
 
     <Button
         android:layout_width="match_parent"
@@ -36,6 +42,9 @@
         android:text="SETTINGS"
         android:id="@+id/button3"
         android:layout_weight="0.33"
-        android:textSize="32dp" />
+        android:textSize="50dp"
+        android:background="#ff0000ff"
+        android:clickable="false"
+        android:textColor="#ffffffff" />
 
 </LinearLayout>

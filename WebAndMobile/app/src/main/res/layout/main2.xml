@@ -3,7 +3,8 @@
     android:id="@+id/linearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="#ff000000">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,21 +12,23 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="INSTRUCTIONS"
         android:id="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
+        android:textColor="#ffffffff"
+        android:textSize="32dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="-Tilt the device down to make the ball roll in that direction"
+        android:text="-Tilt the device to make the on-screen ball roll in a specific direction"
         android:id="@+id/textView2"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp" />
+        android:layout_marginTop="42dp"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +38,8 @@
         android:id="@+id/textView3"
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,18 +49,22 @@
         android:id="@+id/textView4"
         android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffffff" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="Return to Home Screen"
         android:id="@+id/button4"
+        android:layout_marginBottom="51dp"
+        android:textSize="20dp"
+        android:textColor="#ff000000"
+        android:background="#ffe0e0e0"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="53dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
