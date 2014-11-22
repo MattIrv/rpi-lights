@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="#ffffff00">
+    android:background="#ff000000">
 
     <TextView
         android:id="@+id/textView1"
@@ -14,37 +14,59 @@
         android:text="SLIDE BALL"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="50dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffffff"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp" />
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="fill_parent"
+        android:layout_width="234dp"
         android:layout_height="wrap_content"
         android:text="BEGIN"
-        android:layout_weight="0.33"
-        android:textSize="50dp"
-        android:background="#ffff0000"
-        android:textColor="#ffffffff" />
+        android:textSize="32dp"
+        android:background="#dcff0000"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/textView1"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_alignEnd="@+id/textView1"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignStart="@+id/textView1"
+        android:padding="10dp" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
-        android:text="INSTRUCTIONS"
+        android:text=" INSTRUCTIONS "
         android:id="@+id/button2"
-        android:layout_weight="0.33"
-        android:textSize="50dp"
-        android:background="#ff00ff00"
-        android:textColor="#ffffffff" />
+        android:textSize="32dp"
+        android:background="#dc00ff00"
+        android:textColor="#ffffffff"
+        android:padding="10dp"
+        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_alignStart="@+id/button1"
+        android:layout_marginTop="72dp"
+        android:layout_alignRight="@+id/button1"
+        android:layout_alignEnd="@+id/button1" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:text="SETTINGS"
         android:id="@+id/button3"
-        android:layout_weight="0.33"
-        android:textSize="50dp"
-        android:background="#ff0000ff"
+        android:textSize="32dp"
+        android:background="#dc0000ff"
         android:clickable="false"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:padding="10dp"
+        android:layout_below="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:layout_marginTop="65dp"
+        android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2" />
 
-</LinearLayout>
+</RelativeLayout>

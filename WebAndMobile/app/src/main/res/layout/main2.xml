@@ -24,11 +24,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="-Tilt the device to make the on-screen ball roll in a specific direction"
         android:id="@+id/textView2"
+        android:textColor="#ffffffff"
+        android:layout_marginTop="35dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="42dp"
-        android:textColor="#ffffffff" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,10 +38,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="-If the ball rolls off the screen then the game is over"
         android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
+        android:textColor="#ffffffff"
+        android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#ffffffff" />
+        android:layout_marginTop="35dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,24 +52,35 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="-The ball will automatically roll to the wall specified by the specific color on the screen, so tilt the device in the opposite direction to prevent it from rolling off the screen"
         android:id="@+id/textView4"
-        android:layout_below="@+id/textView3"
+        android:textColor="#ffffffff"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#ffffffff" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Return to Home Screen"
+        android:text=" Return to Home Screen "
         android:id="@+id/button4"
-        android:layout_marginBottom="51dp"
         android:textSize="20dp"
         android:textColor="#ff000000"
         android:background="#ffe0e0e0"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView6"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
