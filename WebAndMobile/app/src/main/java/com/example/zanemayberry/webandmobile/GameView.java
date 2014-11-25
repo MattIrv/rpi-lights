@@ -143,6 +143,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     mode++;
                 }
             }
+            System.out.println("Mode: " + mode);
             final int finalMode = mode;
             Thread thread = new Thread(new Runnable() {
                 public void run() {

@@ -135,8 +135,12 @@ public class MakeRequestTask {
             }
         }
         JSONArray lightArray = new JSONArray();
-        lightArray.put(firstLights);
-        lightArray.put(secondLights);
+        if (mode == 0) {
+            lightArray.put(firstLights);
+        } else {
+            lightArray.put(firstLights);
+            lightArray.put(secondLights);
+        }
         JSONObject requestObject = new JSONObject();
         try {
             requestObject.put("lights", lightArray);
