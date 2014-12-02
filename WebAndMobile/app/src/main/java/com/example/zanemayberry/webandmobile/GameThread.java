@@ -56,6 +56,7 @@ public class GameThread extends Thread {
     public void run() {
         long tickCount = 0L;
         System.out.println("Starting game loop...");
+        boolean hasStarted = false;
         while (running) {
             //System.out.println("TickCount: " + tickCount);
             Canvas canvas = this.surfaceHolder.lockCanvas();
@@ -63,6 +64,28 @@ public class GameThread extends Thread {
             gameState.score++;
             gameView.render(canvas, gameState, tickCount);
             surfaceHolder.unlockCanvasAndPost(canvas);
+            if (this.gameState.timeOfChange - System.currentTimeMillis() < 3000) {
+                gameState.isChangingSoon = true;
+            }
+            if (gameState.isChangingSoon) {
+                if (System.currentTimeMillis() - lastBlink > 500) {
+                    this.gameState.isBlinked = !this.gameState.isBlinked;
+                    lastBlink = System.currentTimeMillis();
+                    this.gameState.updateLights = true;
+                }
+            }
+            if (this.gameState.timeOfChange < System.currentTimeMillis()) {
+                this.gameState.curDir = this.gameState.nextDir;
+                this.gameState.nextDir = this.gameState.curDir.diffRandom();
+                this.gameState.timeOfChange += 6000;
+                this.gameState.isBlinked = false;
+                this.gameState.isChangingSoon = false;
+                this.gameState.updateLights = true;
+                hasStarted = true;
+            }
+            if (!hasStarted) {
+                continue;
+            }
             if (checkX()) {
                 gameState.playerPosX += playerSpeed * roll
                         + gravitySpeed * gameState.curDir.hComponent();
@@ -88,16 +111,6 @@ public class GameThread extends Thread {
                     return;
                 }
             }
-            if (this.gameState.timeOfChange - System.currentTimeMillis() < 3000) {
-                gameState.isChangingSoon = true;
-            }
-            if (gameState.isChangingSoon) {
-                if (System.currentTimeMillis() - lastBlink > 500) {
-                    this.gameState.isBlinked = !this.gameState.isBlinked;
-                    lastBlink = System.currentTimeMillis();
-                    this.gameState.updateLights = true;
-                }
-            }
             if (System.currentTimeMillis() > lastSpawn + 400) {
                 EnemyState newEnemy = new EnemyState();
                 newEnemy.size = 25;
@@ -117,14 +130,6 @@ public class GameThread extends Thread {
                 }
                 this.gameState.enemyStateList.add(newEnemy);
                 lastSpawn = System.currentTimeMillis();
-            }
-            if (this.gameState.timeOfChange < System.currentTimeMillis()) {
-                this.gameState.curDir = this.gameState.nextDir;
-                this.gameState.nextDir = this.gameState.curDir.diffRandom();
-                this.gameState.timeOfChange += 6000;
-                this.gameState.isBlinked = false;
-                this.gameState.isChangingSoon = false;
-                this.gameState.updateLights = true;
             }
         }
         System.out.println("Loop Executed " + tickCount + " times.");
