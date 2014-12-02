@@ -81,9 +81,11 @@ public class GameThread extends Thread {
                 this.gameState.isBlinked = false;
                 this.gameState.isChangingSoon = false;
                 this.gameState.updateLights = true;
-                hasStarted = true;
             }
             if (!hasStarted) {
+                if (tickCount > 50) {
+                    hasStarted = true;
+                }
                 continue;
             }
             if (checkX()) {
