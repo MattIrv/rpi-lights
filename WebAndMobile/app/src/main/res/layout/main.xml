@@ -3,7 +3,7 @@
     android:id="@+id/linearLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:weightSum="1"
     android:background="#ff000000">
 
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="SLIDE BALL"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="50dp"
+        android:textSize="75dp"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffffff"
         android:layout_alignParentTop="true"
@@ -45,12 +45,13 @@
         android:background="#dc00ff00"
         android:textColor="#ffffffff"
         android:padding="10dp"
-        android:layout_below="@+id/button1"
+        android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/button1"
         android:layout_alignStart="@+id/button1"
-        android:layout_marginTop="72dp"
         android:layout_alignRight="@+id/button1"
-        android:layout_alignEnd="@+id/button1" />
+        android:layout_alignEnd="@+id/button1"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/button1" />
 
     <Button
         android:layout_width="146dp"
@@ -62,10 +63,10 @@
         android:clickable="false"
         android:textColor="#ffffffff"
         android:padding="10dp"
+        android:layout_marginTop="45dp"
         android:layout_below="@+id/button2"
         android:layout_alignLeft="@+id/button2"
         android:layout_alignStart="@+id/button2"
-        android:layout_marginTop="65dp"
         android:layout_alignRight="@+id/button2"
         android:layout_alignEnd="@+id/button2" />
 

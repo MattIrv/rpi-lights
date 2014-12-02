@@ -174,12 +174,23 @@ public class GameThread extends Thread {
 
     public void updateOrientation(float[] orientationVec) {
         // Azimuth, Pitch, Roll
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
-            pitch = orientationVec[2];
-            roll = orientationVec[1];
-        } else {
-            pitch = orientationVec[1];
-            roll = orientationVec[2];
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                pitch = orientationVec[1];
+                roll = orientationVec[2];
+                break;
+            case Surface.ROTATION_90:
+                pitch = -1*orientationVec[2];
+                roll = orientationVec[1];
+                break;
+            case Surface.ROTATION_180:
+                pitch = -1*orientationVec[1];
+                roll = -1*orientationVec[2];
+                break;
+            case Surface.ROTATION_270:
+                pitch = orientationVec[2];
+                roll = -1*orientationVec[1];
+                break;
         }
     }
 }
